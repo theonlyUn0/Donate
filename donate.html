@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Donate $1 Bitcoin</title>
+</head>
+<body>
+    <button id="donateButton">Donate $1 Bitcoin</button>
+
+    <script>
+        document.getElementById('donateButton').addEventListener('click', function() {
+            fetch('https://api.coindesk.com/v1/bpi/currentprice/BTC.json')
+                .then(response => response.json())
+                .then(data => {
+                    const usdToBtcRate = data.bpi.USD.rate_float;
+                    const btcAmount = (1 / usdToBtcRate).toFixed(8); // Calculate the BTC equivalent of $1
+                    const walletAddress = '39ZQcLpm6bJ4WVMt5QpyKP6Rbag4uLWVxP';
+
+                    const paymentUrl = `bitcoin:${walletAddress}?amount=${btcAmount}`;
+                    window.location.href = paymentUrl;
+                })
+                .catch(error => console.error('Error fetching Bitcoin rate:', error));
+        });
+    </script>
+</body>
+</html>
